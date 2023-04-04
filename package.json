@@ -1,0 +1,17 @@
+{
+  "name": "croptrak_api",
+  "version": "1.0.0",
+  "description": "This package assists with interfacing with the CropTrak API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "author": "James Murray",
+  "license": "ISC",
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "node-fetch": "^3.3.1",
+    "util": "^0.12.5"
+  }
+}
