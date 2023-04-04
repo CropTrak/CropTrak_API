@@ -6,7 +6,7 @@ Create a client
 let client = await new Client('http://api.croptrak.com', <clientId>, <secret>).init();
 ```
 
-Use the save() or test() to test and submit your data
+
 
 ```js
 client.listForms();
@@ -29,45 +29,53 @@ e87019c5-407d-4d89-989d-b8b9047859a0    /Forms/Observations/Harvest
 
 ```
 
-Usage example (Keep in mind units are defined by the database unit defaults)
+To start a new form for submission
 
 ```js
+let form = await client.startForm('/Forms/Observations/Grower Info');
+```
 
-form.save(
+This will also output
+
+```
+To submit this form:
+
+let response = await form.save(
+    assetGUID,
     {
-        'Field Info':{
-            name: 'Field Info',
-            form_group: 'b69dea59-5133-4bfd-9415-88577f41ac32',
-            'Acres': 107,
-            'Irrigation Method': 'Drip',
-            'Soil Texture': null
-        },
-        'Irrigation Method Details':{
-            name: 'Irrigation Method Details',
-            form_group: 'b69dea59-5133-4bfd-9415-88577f41ac32',
-            'Irrigation Power Source': 'Grid',
-            'Water Source': 'Local',
-            'Pumping Depth': 5
-        },
-        // For repeating sections pass the sections inside an array
-        [
-            {
-                'Irrigation Applications':{
-                    name: 'Irrigation Applications',
-                    form_group: 'b69dea59-5133-4bfd-9415-88577f41ac32',
-                    'Amount Watered': 17,
-                    'Date of Watering': '04/17/2018'
-                }
-            },
-            {
-                'Irrigation Applications':{
-                    name: 'Irrigation Applications',
-                    form_group: 'b69dea59-5133-4bfd-9415-88577f41ac32',
-                    'Amount Watered': 17,
-                    'Date of Watering': '04/17/2018'
-                }
-            }
-        ]
-    }
+  'Applies To': {
+    'Grower ID (Famous)': null
+  },
+  'Grower Info': {
+    'Company Owner (Contact)': null,
+    'Contact Email': null,
+    'Company Fax': null,
+    'Company Phone': null
+  },
+  Address: {
+    'Street Address 1': null,
+    'Street Address 2': null,
+    City: null,
+    State: null,
+    'Postal Code': null,
+    County: null
+  },
+  Reference: {
+    'Location Description': null,
+    SPV: null,
+    Fund: null,
+    'Grower Notes': null
+  },
+  'Associated Contracts (1)': {
+    'Contract ID': null,
+    'Contract Documents': null
+  }
+}
 )
 ```
+
+The above code is a template for submitting a valid form.
+
+Use the save() or test() to test and submit your data
+
+Keep in mind units are defined by the database unit defaults.

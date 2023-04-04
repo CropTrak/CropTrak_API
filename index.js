@@ -3,6 +3,11 @@ import { inspect } from 'util';
 
 class Form {
     constructor(form, client, options) {
+        if (!options) {
+            options = {
+                debug: false
+            }
+        }
         this.form = form;
         this.host = client.host;
         this.clientId = client.clientId;
@@ -121,7 +126,9 @@ let response = await form.save(
 class Client {
     constructor(host, clientId, secret, options) {
         if (!options) {
-            options = {}
+            options = {
+                debug: false
+            }
         }
         this.host = host;
         this.clientId = clientId;
