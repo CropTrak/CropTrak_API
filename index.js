@@ -1,6 +1,21 @@
 import http from './http.js';
 import { inspect } from 'util';
 
+class Asset {
+    constructor(asset, client, options) {
+        if (!options) {
+            options = {
+                debug: false
+            }
+        }
+        this.asset = asset;
+        this.host = host;
+        this.clientId = clientId;
+        this.secret = secret;
+        this.debug = options.debug;
+        this.assetGUID = asset.guid;
+    }
+}
 class Form {
     constructor(form, client, options) {
         if (!options) {
@@ -122,7 +137,6 @@ let response = await form.save(
         return result;
     }
 }
-
 class Client {
     constructor(host, clientId, secret, options) {
         if (!options) {
@@ -135,8 +149,9 @@ class Client {
         this.secret = secret;
         this.debug = options.debug;
         this.forms = {};
+        this.assets = {};
     }
-    async init() {
+    async _getForms() {
         let forms = [];
         let root = await http({
             path: `/form/GetFormNodes`,
@@ -152,7 +167,7 @@ class Client {
                 forms.push(folder);
             }
             if (folder.form_type == 'Folder') {
-                let subfolderForms = await this._getContents(folder.guid);
+                let subfolderForms = await this._getFormChildren(folder.guid);
                 for (let s in subfolderForms) {
                     let subfolderForm = subfolderForms[s];
                     if (subfolderForm.form_type == 'Form') {
@@ -169,8 +184,7 @@ class Client {
         }
         return this;
     }
-    async _getContents(hierarchySpecGuid) {
-        let forms = [];
+    async _getFormChildren(hierarchySpecGuid) {
         let contents = await http({
             path: `/form/${hierarchySpecGuid}/GetChildren`,
             method: 'GET',
@@ -185,29 +199,82 @@ class Client {
         for (let c in contents) { 
             let content = contents[c]; 
             if (content.form_type == 'Form') {
-                forms.push(content);
+                this.forms[content.path.trim()] = content;
             } else if (content.form_type == 'Folder') {
-                let subfolderForms = await this._getContents(content.guid);
-                for (let s in subfolderForms) {
-                    let subfolderForm = subfolderForms[s];
-                    if (subfolderForm.form_type == 'Form') {
-                        forms.push(subfolderForm);
-                    }
-                }
+                await this._getFormChildren(content.guid);
             } 
         } 
-        return forms;
+        return this.forms;
     }
-    listForms() {
+    async _getAssets(){
+        let rootAssets = await http({
+            path: `/asset`,
+            method: 'GET',
+            base_url: this.host,
+            clientId: this.clientId,
+            secret: this.secret,
+            debug: this.debug
+        })
+        for (let r in rootAssets) {
+            let root = rootAssets[r];
+            await this._getAssetChildren(root.guid);
+        }
+    }
+    async _getAssetChildren(assetGuid) {
+        let assetChildren = await http({
+            path: `/asset/${assetGuid}/GetChildren`,
+            method: 'GET',
+            base_url: this.host,
+            clientId: this.clientId,
+            secret: this.secret,
+            debug: this.debug
+        })
+
+        if (typeof assetChildren == 'object') {
+            for (let a in assetChildren) {
+                let asset = assetChildren[a];
+                this.assets[asset.guid] = asset;
+                await this._getAssetChildren(asset.guid);
+            }
+        }
+    }
+    async listForms() {
+        if (Object.keys(this.forms).length == 0) {
+            console.log('Warning: No forms loaded. Refreshing...')
+            await this._getForms();
+        }
         console.log(`guid\t\t\t\t\tForm Path`);
         for (let f in this.forms) {
             let form = this.forms[f];
             console.log(`${form.guid}\t${form.path}`)
-            
         }
         return this.forms;
     }
+    async listAssets(list) {
+        if (Object.keys(this.assets).length == 0) {
+            console.log('Warning: No assets loaded. Refreshing...')
+            await this._getAssets();
+        }
+        if (list && list.length > 0) {
+            let assets = [];
+            for (let l in list) {
+                let guid = list[l];
+                assets.push(this.assets[guid]);
+            }
+            return assets;
+        }
+        console.log(`guid\t\t\t\t\tAsset Name`);
+        for (let a in this.assets) {
+            let asset = this.assets[a];
+            console.log(`${asset.guid}\t${asset.name}`)
+        }
+        return this.assets;
+    }
     async startForm(path, options) {
+        if (this.forms == {}) {
+            console.log('Warning: No forms loaded. Refreshing...')
+            await _getForms();
+        }
         let form = this.forms[path.trim()];
         return await new Form(form, this, options).init();
     }

@@ -1,20 +1,22 @@
 
 
-Create a client
+##Create a client
 
 ```js
 let client = await new Client('http://api.croptrak.com', <clientId>, <secret>).init();
 ```
 
+##Adding Form Data
 
+Start by getting a list of forms
 
 ```js
 client.listForms();
 ```
 
-```
-Outputs
+Outputs the following
 
+```
 f34b2db1-ccb5-4007-8f1a-0d9f62941363    /Forms/Observations/Grower Info
 312471f6-bf7e-4d46-9938-0c5ff1617f61    /Forms/Observations/Ranch Info
 3efc44da-6acc-4cae-ab1f-cc85b3558309    /Forms/Observations/Block Info
@@ -35,7 +37,7 @@ To start a new form for submission
 let form = await client.startForm('/Forms/Observations/Grower Info');
 ```
 
-This will also output
+This will also output to the console.
 
 ```
 To submit this form:
@@ -74,8 +76,11 @@ let response = await form.save(
 )
 ```
 
-The above code is a template for submitting a valid form.
+The above code is a template for submitting a valid form. Replace the assetGuid variable and null values with your own variables.
 
-Use the save() or test() to test and submit your data
+Use the test() to perform a validation or save() to submit your data
 
 Keep in mind units are defined by the database unit defaults.
+
+##Get Assets
+
