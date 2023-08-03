@@ -1,6 +1,6 @@
 ##Install
 ```
-    npm install @croptrak/api --save
+npm install @croptrak/api --save
 ```
 
 ##Create a client
