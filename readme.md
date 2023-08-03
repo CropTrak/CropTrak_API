@@ -1,6 +1,11 @@
-
+##Install
+```
+    npm install @croptrak/api --save
+```
 
 ##Create a client
+
+Your clientId and secret key are provided by CropTrak Support.
 
 ```js
 let client = await new Client('http://api.croptrak.com', <clientId>, <secret>).init();
@@ -14,7 +19,7 @@ Start by getting a list of forms
 client.listForms();
 ```
 
-Outputs the following
+Outputs the following list of forms available
 
 ```
 f34b2db1-ccb5-4007-8f1a-0d9f62941363    /Forms/Observations/Grower Info
@@ -37,10 +42,10 @@ To start a new form for submission
 let form = await client.startForm('/Forms/Observations/Grower Info');
 ```
 
-This will also output to the console.
+The startForm command will also output to the console. 
 
 ```
-To submit this form:
+// To submit this form:
 
 let response = await form.save(
     assetGUID,
@@ -84,3 +89,12 @@ Keep in mind units are defined by the database unit defaults.
 
 ##Get Assets
 
+Assets are pulled recursively from root to the lowest hierarchy Asset. 
+
+This can take some time to pull the assets.
+
+```
+
+let assets = client.listAssets();
+
+```
