@@ -1,9 +1,9 @@
-##Install
+## Install
 ```
 npm install @croptrak/api --save
 ```
 
-##Create a client
+## Create a client
 
 Your clientId and secret key are provided by CropTrak Support.
 
@@ -11,7 +11,7 @@ Your clientId and secret key are provided by CropTrak Support.
 let client = await new Client('http://api.croptrak.com', <clientId>, <secret>).init();
 ```
 
-##Adding Form Data
+## Adding Form Data
 
 Start by getting a list of forms
 
@@ -87,13 +87,13 @@ Use the test() to perform a validation or save() to submit your data
 
 Keep in mind units are defined by the database unit defaults.
 
-##Get Assets
+## Get Assets
 
 Assets are pulled recursively from root to the lowest hierarchy Asset. 
 
 This can take some time to pull the assets.
 
-```
+```js
 
 let assets = client.listAssets();
 
