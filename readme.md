@@ -33,7 +33,6 @@ e87019c5-407d-4d89-989d-b8b9047859a0    /Forms/Observations/Harvest
 442aee50-8916-4048-bf61-950db031f00c    /Forms/Observations/Create Block
 73db2d91-b2a3-4395-9402-aea568075287    /Forms/Observations/Create Grower
 57186cff-9c7b-4444-8b46-169f3a6ab153    /Forms/Observations/Create Ranch
-
 ```
 
 To start a new form for submission you will use the startForm function.
@@ -95,6 +94,6 @@ This can take some time to pull the assets.
 
 ```js
 
-let assets = client.listAssets();
+let assets = await client.listAssets();
 
 ```
