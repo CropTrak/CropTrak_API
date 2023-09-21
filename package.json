@@ -1,6 +1,6 @@
 {
   "name": "@croptrak/api",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "This package assists with interfacing with the CropTrak API",
   "main": "index.js",
   "scripts": {
@@ -16,5 +16,9 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": [
+    "croptrak",
+    "api"
+  ]
 }
