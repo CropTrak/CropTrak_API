@@ -3,6 +3,12 @@
 npm install @croptrak/api --save
 ```
 
+## Import library
+
+```js
+import Client from '@croptrak/api';
+```
+
 ## Create a client
 
 Your clientId and secret key are provided by CropTrak Support.
